@@ -9,8 +9,12 @@
 感到东西太多，不知道从哪里下手，找不到重点
 
 来自邢哥的话：
-      可以从web.xml文件配置开始看起，了解项目的入口，从用户登陆开始，springmvc的配置可以学习学习，
-      然后去找controllor层，然后去找service层，然后再去找dao层；在看看jsp是怎么组织的，通过firefox的debubgger进行调试。
+      可以从web.xml文件配置开始看起，了解项目的入口，从用户登陆开始，
+      springmvc的配置可以学习学习，
+      然后去找controllor层，然后去找service层，然后再去找dao层；
+      在看看jsp是怎么组织的，通过firefox的debubgger进行调试,去查看。
       一层一层的去看。
+      
+      
       
 
