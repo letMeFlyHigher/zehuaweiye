@@ -1,0 +1,46 @@
+web.xml加载过程
+当我们去启动一个WEB项目时，容器包括（JBoss、Tomcat等）首先会读取项目web.xml配置文件里的配置，当这一步骤没有出错并且完成之后，项目才能正常地被启动起来。
+启动WEB项目的时候，容器首先会去它的配置文件web.xml读取两个节点:  
+<listener></listener>和<context-param></context-param>。
+紧接着，容器创建一个ServletContext（application），这个WEB项目所有部分都将共享这个上下文。
+容器以<context-param></context-param>的name作为键，value作为值，将其转化为键值对，存入ServletContext。
+容器创建<listener></listener>中的类实例，根据配置的class类路径<listener-class>来创建监听，在监听中会有contextInitialized(ServletContextEvent args)初始化方法，启动Web应用时，系统调用Listener的该方法，在这个方法中获得：
+ServletContext application =ServletContextEvent.getServletContext();
+context-param的值= application.getInitParameter("context-param的键");
+得到这个context-param的值之后，你就可以做一些操作了。
+举例：你可能想在项目启动之前就打开数据库，那么这里就可以在<context-param>中设置数据库的连接方式（驱动、url、user、password），在监听类中初始化数据库的连接。这个监听是自己写的一个类，除了初始化方法，它还有销毁方法，用于关闭应用前释放资源。比如:说数据库连接的关闭，此时，调用contextDestroyed(ServletContextEvent args)，关闭Web应用时，系统调用Listener的该方法。
+接着，容器会读取<filter></filter>，根据指定的类路径来实例化过滤器。
+以上都是在WEB项目还没有完全启动起来的时候就已经完成了的工作。如果系统中有Servlet，则Servlet是在第一次发起请求的时候被实例化的，而且一般不会被容器销毁，它可以服务于多个用户的请求。所以，Servlet的初始化都要比上面提到的那几个要迟。
+总的来说，web.xml的加载顺序是: <context-param>-> <listener> -> <filter> -> <servlet>。其中，如果web.xml中出现了相同的元素，则按照在配置文件中出现的先后顺序来加载。
+对于某类元素而言，与它们出现的顺序是有关的。以<filter>为例，web.xml中当然可以定义多个<filter>，与<filter>相关的一个元素是<filter-mapping>，注意，对于拥有相同<filter-name>的<filter>和<filter-mapping>元素而言，<filter-mapping>必须出现在<filter>之后，否则当解析到<filter-mapping>时，它所对应的<filter-name>还未定义。web容器启动初始化每个<filter>时，按照<filter>出现的顺序来初始化的，当请求资源匹配多个<filter-mapping>时，<filter>拦截资源是按照<filter-mapping>元素出现的顺序来依次调用doFilter()方法的。<servlet>同<filter>类似，此处不再赘述。
+(二)    web.xml标签详解
+1.      XML文档有效性检查
+
+<!DOCTYPE web-app PUBLIC
+
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+这段代码指定文件类型定义(DTD)，可以通过它检查XML文档的有效性。下面显示的<!DOCTYPE>元素有几个特性，这些特性告诉我们关于DTD的信息： 
+
+    web-app定义该文档(部署描述符，不是DTD文件)的根元素 
+    PUBLIC意味着DTD文件可以被公开使用 
+    "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"意味着DTD由Sun Microsystems, Inc.维护。该信息也表示它描述的文档类型是DTD Web Application 2.3，而且DTD是用英文书写的。 
+    URL"http://java.sun.com/dtd/web-app_2_3.dtd"表示D文件的位置。
+2.      <web-app></web-app>
+
+部署描述符的根元素是<web-app>。DTD文件规定<web-app>元素的子元素的语法如下： 
+
+<!ELEMENT web-app (icon?, display-name?, description?, 
+distributable?, context-param*, filter*, filter-mapping*, 
+listener*, servlet*, servlet-mapping*, session-config?, 
+mime-mapping*, welcome-file-list?, 
+error-page*, taglib*, resource-env-ref*, resource-ref*, 
+security-constraint*, login-config?, security-role*,env-entry*, 
+ejb-ref*, ejb-local-ref*)> 
+    正如您所看到的，这个元素含有23个子元素，而且子元素都是可选的。问号(？)表示子元素是可选的，而且只能出现一次。星号(*)表示子元素可在部署描述符中出现零次或多次。有些子元素还可以有它们自己的子元素。web.xml文件中<web-app>元素声明的是下面每个子元素的声明。下面讲述部署描述符中可能包含的所有子元素。
+
+注意：
+
+在Servlet 2.3中，子元素必须按照DTD文件语法描述中指定的顺序出现。比如：如果部署描述符中的<web-app>元素有<servlet>和<servlet-mapping>两个子元素，则<servlet>子元素必须出现在<servlet-mapping>子元素之前。在Servlet2.4中，顺序并不重要。
