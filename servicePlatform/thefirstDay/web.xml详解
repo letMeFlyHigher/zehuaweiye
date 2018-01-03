@@ -13,34 +13,3 @@ context-param的值= application.getInitParameter("context-param的键");
 以上都是在WEB项目还没有完全启动起来的时候就已经完成了的工作。如果系统中有Servlet，则Servlet是在第一次发起请求的时候被实例化的，而且一般不会被容器销毁，它可以服务于多个用户的请求。所以，Servlet的初始化都要比上面提到的那几个要迟。
 总的来说，web.xml的加载顺序是: <context-param>-> <listener> -> <filter> -> <servlet>。其中，如果web.xml中出现了相同的元素，则按照在配置文件中出现的先后顺序来加载。
 对于某类元素而言，与它们出现的顺序是有关的。以<filter>为例，web.xml中当然可以定义多个<filter>，与<filter>相关的一个元素是<filter-mapping>，注意，对于拥有相同<filter-name>的<filter>和<filter-mapping>元素而言，<filter-mapping>必须出现在<filter>之后，否则当解析到<filter-mapping>时，它所对应的<filter-name>还未定义。web容器启动初始化每个<filter>时，按照<filter>出现的顺序来初始化的，当请求资源匹配多个<filter-mapping>时，<filter>拦截资源是按照<filter-mapping>元素出现的顺序来依次调用doFilter()方法的。<servlet>同<filter>类似，此处不再赘述。
-(二)    web.xml标签详解
-1.      XML文档有效性检查
-
-<!DOCTYPE web-app PUBLIC
-
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
-
-这段代码指定文件类型定义(DTD)，可以通过它检查XML文档的有效性。下面显示的<!DOCTYPE>元素有几个特性，这些特性告诉我们关于DTD的信息： 
-
-    web-app定义该文档(部署描述符，不是DTD文件)的根元素 
-    PUBLIC意味着DTD文件可以被公开使用 
-    "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"意味着DTD由Sun Microsystems, Inc.维护。该信息也表示它描述的文档类型是DTD Web Application 2.3，而且DTD是用英文书写的。 
-    URL"http://java.sun.com/dtd/web-app_2_3.dtd"表示D文件的位置。
-2.      <web-app></web-app>
-
-部署描述符的根元素是<web-app>。DTD文件规定<web-app>元素的子元素的语法如下： 
-
-<!ELEMENT web-app (icon?, display-name?, description?, 
-distributable?, context-param*, filter*, filter-mapping*, 
-listener*, servlet*, servlet-mapping*, session-config?, 
-mime-mapping*, welcome-file-list?, 
-error-page*, taglib*, resource-env-ref*, resource-ref*, 
-security-constraint*, login-config?, security-role*,env-entry*, 
-ejb-ref*, ejb-local-ref*)> 
-    正如您所看到的，这个元素含有23个子元素，而且子元素都是可选的。问号(？)表示子元素是可选的，而且只能出现一次。星号(*)表示子元素可在部署描述符中出现零次或多次。有些子元素还可以有它们自己的子元素。web.xml文件中<web-app>元素声明的是下面每个子元素的声明。下面讲述部署描述符中可能包含的所有子元素。
-
-注意：
-
-在Servlet 2.3中，子元素必须按照DTD文件语法描述中指定的顺序出现。比如：如果部署描述符中的<web-app>元素有<servlet>和<servlet-mapping>两个子元素，则<servlet>子元素必须出现在<servlet-mapping>子元素之前。在Servlet2.4中，顺序并不重要。
