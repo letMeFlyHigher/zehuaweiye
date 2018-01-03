@@ -18,6 +18,6 @@
       
    ![Image of Yaktocat](http://terasolunaorg.github.io/guideline/1.0.1.RELEASE/en/_images/RequestLifecycle.png)
       
-   第二部：
+   第二步：
 
 checkLogin----> index.jsp?moduleid=fwzz====>加载iframe=====》product/serviceH
