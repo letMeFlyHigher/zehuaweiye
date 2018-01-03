@@ -21,8 +21,8 @@
       
    第二步：当请求通过最后一个过滤器，这个时候如上图请求就进入了springMVC的dispatcher中;
    
-   第三步：dispatcher进行处理：
+   第三步：dispatcher进行处理：（源码）
             1. 在handlerMapping（处理器映射器）中，查找处理器是哪一个？？
-            
+                1. springMVC
 
 checkLogin----> index.jsp?moduleid=fwzz====>加载iframe=====》product/serviceH
