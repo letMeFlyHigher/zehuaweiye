@@ -16,7 +16,7 @@
   现在开始做
     第一步：先了解springMVC的流程。
       
-   ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+   ![Image of Yaktocat](http://terasolunaorg.github.io/guideline/1.0.1.RELEASE/en/_images/RequestLifecycle.png)
       
    第二部：
 
