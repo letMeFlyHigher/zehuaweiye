@@ -13,11 +13,14 @@
       
       
       
+  # 用户登录   #
   现在开始做
     第一步：先了解springMVC的流程。
       
    ![Image of Yaktocat](http://terasolunaorg.github.io/guideline/1.0.1.RELEASE/en/_images/RequestLifecycle.png)
       
-   第二步：
+   第二步：当请求通过最后一个过滤器，这个时候如上图请求就进入了springMVC的dispatcher中;
+   
+   第三步：dispatcher进行处理，
 
 checkLogin----> index.jsp?moduleid=fwzz====>加载iframe=====》product/serviceH
