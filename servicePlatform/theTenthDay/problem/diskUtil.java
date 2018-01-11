@@ -1,4 +1,4 @@
-```
+
 package util;
 
 import java.io.BufferedReader;
@@ -59,15 +59,24 @@ public class DiskUtil {
 		String[] hh = indexStr.split("站号\\s+站名\\s+最小相对湿度\\s+等级\\s+指数类别\\s+");
 //		System.out.println(hh);
 		String srcFileName = hh[0];
+		
 //		System.out.println("srcFileName ---- > " + srcFileName);
+		StringBuffer sb = new StringBuffer();
 		for(int i = 1 ; i < hh.length; i ++){
 			String[] hhh = hh[i].split("\n");
 			for(int j = 0 ; j < hhh.length; j++){
 //				System.out.println(hhh[j]);
 				String[] ss = hhh[j].split("\\s+");
-				System.out.println(ss[0] + "---" + ss[1] +"---"+ ss[2] + "---" + ss[3] + "---" +ss[4] );
+//				System.out.println(ss[0] + "---" + ss[1] +"---"+ ss[2] + "---" + ss[3] + "---" +ss[4] );
+				
+				//在这里组织数据   //这里用回调函数感觉会看的很牛X
+				sb.append(ss[0]).append("|").append("发布日期").append("|")
+				.append(ss[4]).append("|").append(ss[3]).append("|")
+				.append("提示语").append("|").append("描述").append("\r\n");
+				
 			}
 		}
+		System.out.println(sb.toString());
 		
 		
 		
@@ -80,33 +89,6 @@ public class DiskUtil {
 	        try {
 	            System.out.println("以行为单位读取文件内容，一次读一整行：");
 	            reader = new BufferedReader(new FileReader(file));
-	            String tempString = null;
-	            int line = 1;
-	            // 一次读入一行，直到读入null为文件结束
-	            while ((tempString = reader.readLine()) != null) {
-	                // 显示行号
-	                System.out.println("line " + line + ": " + tempString);
-	                line++;
-	            }
-	            reader.close();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        } finally {
-	            if (reader != null) {
-	                try {
-	                    reader.close();
-	                } catch (IOException e1) {
-	                }
-	            }
-	        }
-	    }
-	
-	   public static void readFileByLines1(String fileName) {
-	        File file = new File(fileName);
-	        BufferedReader reader = null;
-	        try {
-	            System.out.println("以行为单位读取文件内容，一次读一整行：");
-	            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName),"utf-8"));
 	            String tempString = null;
 	            int line = 1;
 	            // 一次读入一行，直到读入null为文件结束
@@ -178,4 +160,3 @@ public class DiskUtil {
     }
 
 }
-```
